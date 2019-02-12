@@ -13,9 +13,8 @@ const server = express()
 
 const io = socketIO(server);
 
-io.on('connection', (socket) => {
-  console.log('Client connected');
-  socket.on('disconnect', () => console.log('Client disconnected'));
+io.on('connection', client => {
+  client.on('event', data => {
+    client.broadcast.emit(`project-${data.token}`, data)
+  });
 });
-
-setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
